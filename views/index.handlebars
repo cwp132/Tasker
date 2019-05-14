@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Tasker</h1>
+        <p class="lead">Tasker keeps track of all of your daily To Do's!</p>
+        <hr class="my-4">
+        <p>Add a task that needs done.
+            If the task is on the left hand that<br>
+            means that it still needs to get done.
+            Once you have completed the task click <br>
+            Completed and it will move to the right.
+        </p>
+
+        <a class="btn btn-primary btn-lg" href="https://github.com/cwp132/Tasker" role="button">Learn more</a>
+
+    </div>
+</div>
+
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col s6">
+                {{#each tasks}}
+                {{#unless this.completed}}
+                <div>
+                    <form action="/tasks/{{this.id}}?_method=PUT" method="POST">
+                        <button type="submit" class='taskAvailable'> {{this.taskName}}</button>
+                    </form>
+                </div>
+                {{/unless}}
+                {{/each}}
+            </div>
+
+            <div class="col s6">
+                {{#each tasks}}
+                {{#if this.completed}}
+                <div class='taskCompleted'>
+                    <div>
+                        {{this.taskName}}
+                    </div>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</main>
+
+<br>
+<br>
+
+<div class="container">
+    <form class="create">
+
+        <input type="text" class="form-control" id="textBox" placeholder="Enter a task!">
+        <br>
+        <br>
+        <a class="btn btn-primary btn-lg" role="button">Submit task</a>
+    </form>
+</div>
+
+<script>
+    $(".taskCompleted").on("click", function (event) {
+        var id = $(this).data("id")
+
+        var comState = {
+            completed: 1
+        };
+        $.ajax("/api/tasks" + id, {
+            type: "PUT",
+            data: comState
+        }).then(
+            function () {
+                location.reload();
+            }
+        );
+    });
+
+    $(".create").on("click", function (event) {
+        event.preventDefault();
+
+        var newTask = {
+            taskName: $("#textBox").val(),
+            completed: 0
+        };
+        $.ajax("/api/tasks", {
+            type: "POST",
+            data: newTask
+        }).then(function () {
+            location.reload();
+        })
+    })
+</script>
