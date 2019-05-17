@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
         var hbsObject = {
             tasks: data
         };
-        console.log(hbsObject);
+        // console.log(hbsObject);
         res.render('index', hbsObject);
     });
 });
@@ -21,21 +21,23 @@ router.post('/api/tasks', function (req, res) {
         'taskName', 'completed'
     ], [
         req.body.taskName, req.body.completed
-    ], function (data) {
-        res.redirect('/');
+    ], function (result) {
+
         res.json({
-            // id: result.insertId
-        })
+            id: result.id
+        });
     });
 });
 
 router.put('/api/tasks/:id', function (req, res) {
     var condition = 'id = ' + req.params.id;
-
     task.updateOne({
-        completed: true
+        completed: 1
     }, condition, function (data) {
+        // console.log(data);
+        console.log("Yams")
         res.redirect('/');
+
     });
 });
 
