@@ -75,9 +75,10 @@
             data: comState
         }).then(
             function () {
-                window.location.reload(false);
+
             }
         );
+        location.reload();
     });
 
     $("#create").on("click", function (event) {
@@ -91,7 +92,8 @@
             type: "POST",
             data: newTask
         }).then(function () {
-            location.reload();
+
         })
+        location.reload();
     })
 </script>
